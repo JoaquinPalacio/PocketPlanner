@@ -3,16 +3,16 @@ from django.shortcuts import render
 # Create your views here.
 
 
-def transactions(request):
-    return render(request, 'transactions.html')
-
-
-def detail(request):
-    return render(request, 'detail.html')
+def all_categories(request):
+    return render(request, 'categories.html')
 
 
 def create(request):
     return render(request, 'create.html')
+
+
+def detail(request):
+    return render(request, 'detail.html')
 
 
 def edit(request):
