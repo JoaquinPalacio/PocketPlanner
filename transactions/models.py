@@ -7,8 +7,7 @@ from django.conf import settings
 class Transaction(models.Model):
     types = [
         ('deposit', 'Deposit'),
-        ('withdrawal', 'Withdrawal'),
-        ('transfer', 'Transfer'),
+        ('withdrawal', 'Withdrawal')
     ]
     amount = models.FloatField()
     type_transaction = models.CharField(max_length=10, choices=types)

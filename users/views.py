@@ -1,27 +1,68 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import SignUpForm, UpdateProfileForm
 
 # Create your views here.
 
 
 def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('profile')
+        else:
+            messages.error(request, 'Credenciales inválidas.')
     return render(request, 'login.html')
 
 
+@login_required
 def logout_user(request):
-    return render(request, 'logout.html')
+    logout(request)
+    return redirect('home')
 
 
 def signin_user(request):
-    return render(request, 'signin.html')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            return redirect('profile')
+    else:
+        form = SignUpForm()
+    return render(request, 'signin.html', {'form': form})
 
 
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
 
+@login_required
 def update_profile(request):
-    return render(request, 'update.html')
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado.')
+            return redirect('profile')
+    else:
+        form = UpdateProfileForm(instance=request.user)
+    return render(request, 'update.html', {'form': form})
 
 
+@login_required
 def delete_profile(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, 'Perfil eliminado.')
+        return redirect('home')
     return render(request, 'delete.html')
