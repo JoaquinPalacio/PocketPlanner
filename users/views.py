@@ -7,6 +7,23 @@ from .forms import SignUpForm, UpdateProfileForm
 # Create your views here.
 
 
+def signup_user(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            name = form.cleaned_data.get('name')
+            last_name = form.cleaned_data.get('last_name')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            return redirect('profile')
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+
+
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -24,21 +41,6 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
-
-
-def signin_user(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            login(request, user)
-            return redirect('profile')
-    else:
-        form = SignUpForm()
-    return render(request, 'signin.html', {'form': form})
 
 
 @login_required
