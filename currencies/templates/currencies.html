@@ -1,3 +1,33 @@
 {% extends 'base.html' %} {% block content %}
-<h1>CURRENCIES</h1>
+<div class="container mt-4">
+    <h1>Divisas</h1>
+    {% if last_updated %}
+    <p class="text-muted">Última actualización: {{ last_updated }}</p>
+    {% endif %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Tasa vs USD</th>
+                <th>Última Actualización</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.code }}</td>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.rate_to_usd }}</td>
+                <td>{{ currency.updated_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No hay divisas disponibles</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

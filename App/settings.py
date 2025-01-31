@@ -132,3 +132,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+EXCHANGERATE_API_KEY = '1ad3b190911f691e72fa003b'
+EXCHANGERATE_API_URL = 'https://v6.exchangerate-api.com/v6/'
