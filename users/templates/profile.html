@@ -1,4 +1,20 @@
 {% extends 'base.html' %} {% block content %}
-<h1>PROFILE</h1>
+<div class="container mt-4">
 
+    <h1>Hello {{ user.username }}!</h1>
+
+    <p>Your profile:</p>
+
+    <div class="card card-body">
+        <ul>
+            <li>Name: {{ user.first_name }}</li>
+            <li>Last name: {{ user.last_name }}</li>
+            <li>Username: {{ user.username }}</li>
+            <li>Base currency: {{ user.base_currency }}</li>
+        </ul>
+        <a type="button" class="btn btn-secondary" href="{% url 'update_profile' %}">Update profile</a>
+    </div>
+
+
+</div>
 {% endblock %}

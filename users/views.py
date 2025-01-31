@@ -4,7 +4,6 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
-from .forms import UpdateProfileForm
 from .models import CustomUser
 from currencies.models import Currency
 
@@ -77,15 +76,26 @@ def profile(request):
 
 @login_required
 def update_profile(request):
-    if request.method == 'POST':
-        form = UpdateProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Perfil actualizado.')
-            return redirect('profile')
-    else:
-        form = UpdateProfileForm(instance=request.user)
-    return render(request, 'update.html', {'form': form})
+    currencies = Currency.objects.all()
+    user = request.user
+
+    if request.method == "POST":
+        user.first_name = request.POST["first_name"]
+        user.last_name = request.POST["last_name"]
+        user.username = request.POST["username"]
+        selected_currency_code = request.POST.get("currency")
+        if selected_currency_code:
+            currency_obj = Currency.objects.get(code=selected_currency_code)
+            user.base_currency = currency_obj
+
+        user.save()
+
+        return redirect("profile")
+
+    return render(request, "update.html", {
+        "user": user,
+        "currencies": currencies
+    })
 
 
 @login_required
