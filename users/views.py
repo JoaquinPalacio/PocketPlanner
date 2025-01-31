@@ -11,14 +11,14 @@ def signup_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            name = form.cleaned_data.get('name')
-            last_name = form.cleaned_data.get('last_name')
+            password = form.cleaned_data.get('password1')
             user = authenticate(request, username=username, password=password)
-            login(request, user)
-            return redirect('profile')
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Registro exitoso.')
+                return redirect('profile')
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -40,6 +40,7 @@ def login_user(request):
 @login_required
 def logout_user(request):
     logout(request)
+    messages.success(request, 'Sesión cerrada.')
     return redirect('home')
 
 
