@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignUpForm, UpdateProfileForm
@@ -25,16 +26,22 @@ def signup_user(request):
 
 
 def login_user(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user:
+    if request.method == 'GET':
+        return render(request, 'login.html', {
+            'form': AuthenticationForm()
+        })
+    else:
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+
+        if user is None:
+            messages.error(request, 'Credenciales inválidas.')
+            return render(request, 'login.html', {
+                'form': AuthenticationForm(request.POST),
+            })
+        else:
             login(request, user)
             return redirect('profile')
-        else:
-            messages.error(request, 'Credenciales inválidas.')
-    return render(request, 'login.html')
 
 
 @login_required
