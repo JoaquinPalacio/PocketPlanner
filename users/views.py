@@ -6,21 +6,27 @@ from django.contrib import messages
 from django.db import IntegrityError
 from .forms import UpdateProfileForm
 from .models import CustomUser
+from currencies.models import Currency
 
 # Create your views here.
 
 
 def signup_user(request):
+    currencies = Currency.objects.all()
     if request.method == 'GET':
         return render(request, 'signup.html', {
-            'form': UserCreationForm()
+            'form': UserCreationForm(),
+            'currencies': currencies,
         })
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
+                selected_currency = request.POST['currency']
+                currency_obj = Currency.objects.get(code=selected_currency)
                 user = CustomUser.objects.create_user(
                     username=request.POST['username'], password=request.POST['password1'],
-                    first_name=request.POST['first_name'], last_name=request.POST['last_name'])
+                    first_name=request.POST['first_name'], last_name=request.POST['last_name'],
+                    base_currency=currency_obj)
                 user.save()
                 login(request, user)
                 return redirect('profile')
@@ -28,11 +34,13 @@ def signup_user(request):
                 messages.error(request, 'El usuario ya existe.')
                 return render(request, 'signup.html', {
                     'form': UserCreationForm(),
+                    'currencies': currencies,
                 })
         else:
             messages.error(request, 'Las contraseñas no coinciden.')
             return render(request, 'signup.html', {
                 'form': UserCreationForm(),
+                'currencies': currencies,
             })
 
 
@@ -64,7 +72,7 @@ def logout_user(request):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    return render(request, 'profile.html', {'user': request.user})
 
 
 @login_required
