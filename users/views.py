@@ -1,65 +1,46 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
 from .models import CustomUser
+from .forms import CustomSignupForm
 from currencies.models import Currency
 
 # Create your views here.
 
 
 def signup_user(request):
-    currencies = Currency.objects.all()
-    if request.method == 'GET':
-        return render(request, 'signup.html', {
-            'form': UserCreationForm(),
-            'currencies': currencies,
-        })
+    if request.method == 'POST':
+        form = CustomSignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('profile')
     else:
-        if request.POST['password1'] == request.POST['password2']:
-            try:
-                selected_currency = request.POST['currency']
-                currency_obj = Currency.objects.get(code=selected_currency)
-                user = CustomUser.objects.create_user(
-                    username=request.POST['username'], password=request.POST['password1'],
-                    first_name=request.POST['first_name'], last_name=request.POST['last_name'],
-                    base_currency=currency_obj)
-                user.save()
-                login(request, user)
-                return redirect('profile')
-            except IntegrityError:
-                messages.error(request, 'El usuario ya existe.')
-                return render(request, 'signup.html', {
-                    'form': UserCreationForm(),
-                    'currencies': currencies,
-                })
-        else:
-            messages.error(request, 'Las contraseñas no coinciden.')
-            return render(request, 'signup.html', {
-                'form': UserCreationForm(),
-                'currencies': currencies,
-            })
+        form = CustomSignupForm()
+
+    return render(request, 'signup.html', {
+        'form': form,
+        'currencies': Currency.objects.all()
+    })
 
 
 def login_user(request):
-    if request.method == 'GET':
-        return render(request, 'login.html', {
-            'form': AuthenticationForm()
-        })
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('profile')
     else:
-        user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
+        form = AuthenticationForm()
 
-        if user is None:
-            messages.error(request, 'Credenciales inválidas.')
-            return render(request, 'login.html', {
-                'form': AuthenticationForm(request.POST),
-            })
-        else:
-            login(request, user)
-            return redirect('profile')
+    return render(request, 'login.html', {'form': form})
 
 
 @login_required
