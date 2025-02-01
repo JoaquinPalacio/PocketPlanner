@@ -1,40 +1,66 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% block content %}
 <div class="container mt-3 mb-3">
-    <h1 class="text-center">Edit your profile</h1>
+  <h1 class="text-center">Edit your profile</h1>
 
-    <form method="POST" class="card card-body">
-        {% csrf_token %}
+  <form method="POST" class="card card-body">
+    {% csrf_token %}
 
-        <div class="form-group">
-            <label for="first_name">First Name:</label>
-            <input type="text" class="form-control" id="first_name" value="{{ user.first_name }}"
-                placeholder="Enter your name" name="first_name">
-        </div>
+    <div class="form-group">
+      <label for="id_first_name">First Name:</label>
+      <input type="text" 
+             class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" 
+             id="id_first_name" 
+             name="first_name"
+             value="{{ form.first_name.value|default:request.user.first_name }}">
+      {% for error in form.first_name.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-        <div class="form-group">
-            <label for="last_name">Last Name:</label>
-            <input type="text" class="form-control" id="last_name" value="{{ user.last_name }}"
-                placeholder="Enter your last name" name="last_name">
-        </div>
+    <div class="form-group">
+      <label for="id_last_name">Last Name:</label>
+      <input type="text" 
+             class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" 
+             id="id_last_name" 
+             name="last_name"
+             value="{{ form.last_name.value|default:request.user.last_name }}">
+      {% for error in form.last_name.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-        <div class="form-group">
-            <label for="currency">Base Currency:</label>
-            <select class="form-control" name="currency" , id="currency">
-              <option value="" disabled selected>Select a currency</option>
-              {% for currency in currencies %}
-              <option value="{{ currency.code }}" {% if user.base_currency == currency %}selected{% endif %} >{{ currency.name }}
-              </option>
-              {% endfor %}
-            </select>
-          </div>
+    <div class="form-group">
+      <label for="id_base_currency">Base Currency:</label>
+      <select class="form-control {% if form.base_currency.errors %}is-invalid{% endif %}" 
+              id="id_base_currency" 
+              name="base_currency">
+        <option value="" disabled>Select a currency</option>
+        {% for currency in form.base_currency.field.queryset %}
+          <option value="{{ currency.id }}" 
+                  {% if form.base_currency.value == currency.id or request.user.base_currency == currency.id %}selected{% endif %}>
+            {{ currency.name }}
+          </option>
+        {% endfor %}
+      </select>
+      {% for error in form.base_currency.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" value="{{ user.username }}"
-                placeholder="Enter your username" name="username">
-        </div>
+    <div class="form-group">
+      <label for="id_username">Username:</label>
+      <input type="text" 
+             class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
+             id="id_username" 
+             name="username"
+             value="{{ form.username.value|default:request.user.username }}">
+      {% for error in form.username.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
 </div>
 {% endblock %}

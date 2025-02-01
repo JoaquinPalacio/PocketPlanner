@@ -15,3 +15,14 @@ class CustomSignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'base_currency')
+
+class UpdateProfileForm(forms.ModelForm):
+    base_currency = forms.ModelChoiceField(
+        queryset=Currency.objects.all(),
+        required=True,
+        label="Moneda Base"
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'username', 'base_currency']
