@@ -12,7 +12,10 @@
             <li>Username: {{ user.username }}</li>
             <li>Base currency: {{ user.base_currency }}</li>
         </ul>
-        <a type="button" class="btn btn-secondary" href="{% url 'update_profile' %}">Update profile</a>
+        <div>
+            <a type="button" class="btn btn-secondary" href="{% url 'update_profile' %}">Update</a>
+            <a type="button" class="btn btn-danger" href="{% url 'delete_profile' %}"" onclick="return confirm('Are you sure you want to delete your profile?');">Delete</a>
+        </div>
     </div>
 
 
