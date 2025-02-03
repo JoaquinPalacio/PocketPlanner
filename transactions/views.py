@@ -17,11 +17,14 @@ def transactions(request):
     if request.method == 'POST':
         amount = request.POST['amount']
         type_transaction = request.POST['type_transaction']
-        category_id = request.POST['category']
         currency_id = request.POST['currency']
+        category_id = request.POST['category']
         
         try:
-            category = Category.objects.get(id=category_id)
+            if category_id == '':
+                category = None
+            else:
+                category = Category.objects.get(id=category_id)
             currency = Currency.objects.get(id=currency_id)
             Transaction.objects.create(amount=amount, type_transaction=type_transaction, category=category, currency=currency, user=request.user)
             return redirect('transactions')
@@ -41,7 +44,10 @@ def edit(request, id):
         category_id = request.POST['category']
         currency_id = request.POST['currency']
         try:
-            category = Category.objects.get(id=category_id)
+            if category_id == '':
+                category = None
+            else:
+                category = Category.objects.get(id=category_id)
             currency = Currency.objects.get(id=currency_id)
             transaction.amount = amount
             transaction.type_transaction = type_transaction

@@ -26,7 +26,8 @@
 
                 <div class="col-md-6">
                     <label for="category" class="form-label">Category</label>
-                    <select class="form-select" id="category" name="category" required>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">No category</option>
                         {% for category in categories %}
                         <option value="{{ category.id }}" {% if transaction.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
                         {% endfor %}
