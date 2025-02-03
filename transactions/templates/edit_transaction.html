@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block content %}
+<div class="card shadow mb-5">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Edit Transaction</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="amount" class="form-label">Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" step="0.01" class="form-control" id="amount" name="amount" 
+                               placeholder="0.00" value="{{ transaction.amount }}" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="type_transaction" class="form-label">Transaction Type</label>
+                    <select class="form-select" id="type_transaction" name="type_transaction" required>
+                        <option value="deposit" class="text-success">Deposit</option>
+                        <option value="withdrawal" class="text-danger">Withdrawal</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category" required>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}" {% if transaction.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="currency" class="form-label">Currency</label>
+                    <select class="form-select" id="currency" name="currency" required>
+                        {% for currency in currencies %}
+                        <option value="{{ currency.id }}" {% if transaction.currency.id == currency.id %}selected{% endif %}>{{ currency.code }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save me-2"></i>Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

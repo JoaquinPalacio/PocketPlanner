@@ -1,88 +1,102 @@
 {% extends 'base.html' %} 
 {% block content %}
-<div class="container mt-3 mb-3">
-  <h1 class="text-center">Sign Up</h1>
-
-  <form method="POST" class="card card-body">
-    {% csrf_token %}
-
-    <div class="form-group">
-      <label for="id_first_name">First Name:</label>
-      <input type="text" 
-             class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" 
-             id="id_first_name" 
-             name="first_name"
-             value="{{ form.first_name.value|default:'' }}">
-      {% for error in form.first_name.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Sign Up</h3>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_first_name">First Name:</label>
+            <input type="text" 
+                   class="form-control form-control-lg {% if form.first_name.errors %}is-invalid{% endif %}" 
+                   id="id_first_name" 
+                   name="first_name"
+                   value="{{ form.first_name.value|default:'' }}">
+            {% for error in form.first_name.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <div class="mb-4">
+            <label for="id_last_name">Last Name:</label>
+            <input type="text" 
+                   class="form-control form-control-lg {% if form.last_name.errors %}is-invalid{% endif %}" 
+                   id="id_last_name" 
+                   name="last_name"
+                   value="{{ form.last_name.value|default:'' }}">
+            {% for error in form.last_name.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <div class="mb-4">
+            <label for="id_base_currency">Base Currency:</label>
+            <select class="form-control form-control-lg {% if form.base_currency.errors %}is-invalid{% endif %}" 
+                    id="id_base_currency" 
+                    name="base_currency">
+              <option value="" disabled selected>Select a currency</option>
+              {% for currency in currencies %}
+                <option value="{{ currency.id }}" 
+                        {% if form.base_currency.value == currency.id %}selected{% endif %}>
+                  {{ currency.name }}
+                </option>
+              {% endfor %}
+            </select>
+            {% for error in form.base_currency.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <div class="mb-4">
+            <label for="id_username">Username:</label>
+            <input type="text" 
+                   class="form-control form-control-lg {% if form.username.errors %}is-invalid{% endif %}" 
+                   id="id_username" 
+                   name="username"
+                   value="{{ form.username.value|default:'' }}">
+            {% for error in form.username.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <div class="mb-4">
+            <label for="id_password1">Password:</label>
+            <input type="password" 
+                   class="form-control form-control-lg {% if form.password1.errors %}is-invalid{% endif %}" 
+                   id="id_password1" 
+                   name="password1">
+            {% for error in form.password1.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <div class="mb-4">
+            <label for="id_password2">Confirm Password:</label>
+            <input type="password" 
+                   class="form-control form-control-lg {% if form.password2.errors %}is-invalid{% endif %}" 
+                   id="id_password2" 
+                   name="password2">
+            {% for error in form.password2.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+      
+          <button type="submit" class="btn btn-primary btn-lg w-100">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Sign Up
+          </button>
+        </form>
+      </div>
+      <div class="card-footer text-center">
+        <small>Already have an account? 
+            <a href="{% url 'login' %}">Login here</a>
+        </small>
+      </div>
     </div>
-
-    <div class="form-group">
-      <label for="id_last_name">Last Name:</label>
-      <input type="text" 
-             class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" 
-             id="id_last_name" 
-             name="last_name"
-             value="{{ form.last_name.value|default:'' }}">
-      {% for error in form.last_name.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      <label for="id_base_currency">Base Currency:</label>
-      <select class="form-control {% if form.base_currency.errors %}is-invalid{% endif %}" 
-              id="id_base_currency" 
-              name="base_currency">
-        <option value="" disabled selected>Select a currency</option>
-        {% for currency in currencies %}
-          <option value="{{ currency.id }}" 
-                  {% if form.base_currency.value == currency.id %}selected{% endif %}>
-            {{ currency.name }}
-          </option>
-        {% endfor %}
-      </select>
-      {% for error in form.base_currency.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      <label for="id_username">Username:</label>
-      <input type="text" 
-             class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
-             id="id_username" 
-             name="username"
-             value="{{ form.username.value|default:'' }}">
-      {% for error in form.username.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      <label for="id_password1">Password:</label>
-      <input type="password" 
-             class="form-control {% if form.password1.errors %}is-invalid{% endif %}" 
-             id="id_password1" 
-             name="password1">
-      {% for error in form.password1.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      <label for="id_password2">Confirm Password:</label>
-      <input type="password" 
-             class="form-control {% if form.password2.errors %}is-invalid{% endif %}" 
-             id="id_password2" 
-             name="password2">
-      {% for error in form.password2.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  </div>
 </div>
 {% endblock %}

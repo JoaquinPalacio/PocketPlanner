@@ -14,10 +14,10 @@
     </style>
 </head>
 
-<body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Pocket Planner</a>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary" href="/">Pocket Planner</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,31 +28,31 @@
           {% if not user.is_authenticated %}
 
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'signup' %}">Signup</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'signup' %}">Signup</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'login' %}">Login</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'login' %}">Login</a>
           </li>
 
           {% else %}
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'transactions' %}">Transactions</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'transactions' %}">Transactions</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'currencies' %}">Currencies</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'currencies' %}">Currencies</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'converter' %}">Converter</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'converter' %}">Converter</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'categories' %}">Categories</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'categories' %}">Categories</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'profile' %}">Profile</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'profile' %}">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'logout' %}">Logout</a>
           </li>
           {% endif %}
         </ul>
@@ -73,20 +73,5 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      // Formatear montos en la tabla
-      document.querySelectorAll('.amount').forEach(element => {
-          const amount = parseFloat(element.textContent);
-          element.textContent = amount.toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD', // Cambiar según necesidad
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-          });
-      });
-  });
-  </script>
 
 </html>

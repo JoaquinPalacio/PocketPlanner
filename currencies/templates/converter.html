@@ -1,42 +1,51 @@
 {% extends 'base.html' %} 
 {% block content %}
-<div class="container mt-3 mb-3">
-    <h1 class="text-center">Converter</h1>
-    <form method="POST" class="card card-body">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="from_currency">FROM</label>
-            <select class="form-control" id="from_currency" name="from_currency">
-                {% for currency in currencies %}
-                    <option value="{{ currency.code }}" 
-                        {% if from_currency == currency.code %}selected{% endif %}>
-                        {{ currency.name }} ({{ currency.code }})
-                    </option>
-                {% endfor %}
-            </select>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Converter</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="from_currency">FROM</label>
+                        <select class="form-control form-control-lg" id="from_currency" name="from_currency">
+                            {% for currency in currencies %}
+                                <option value="{{ currency.code }}" 
+                                    {% if from_currency == currency.code %}selected{% endif %}>
+                                    {{ currency.name }} ({{ currency.code }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="to_currency">TO</label>
+                        <select class="form-control form-control-lg" id="to_currency" name="to_currency">
+                            {% for currency in currencies %}
+                                <option value="{{ currency.code }}" 
+                                    {% if to_currency == currency.code %}selected{% endif %}>
+                                    {{ currency.name }} ({{ currency.code }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="amount">AMOUNT</label>
+                        <input type="number" step="0.01" class="form-control form-control-lg" id="amount" name="amount" 
+                            value="{{ amount|default:'' }}">
+                    </div>
+                    {% if converted_amount %}
+                    <div class="mb-4 mt-3">
+                        <h4>RESULT: {{ converted_amount|floatformat:2 }}</h4>
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary mt-3">CONVERT</button>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="to_currency">TO</label>
-            <select class="form-control" id="to_currency" name="to_currency">
-                {% for currency in currencies %}
-                    <option value="{{ currency.code }}" 
-                        {% if to_currency == currency.code %}selected{% endif %}>
-                        {{ currency.name }} ({{ currency.code }})
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="amount">AMOUNT</label>
-            <input type="number" step="0.01" class="form-control" id="amount" name="amount" 
-                value="{{ amount|default:'' }}">
-        </div>
-        {% if converted_amount %}
-        <div class="form-group mt-3">
-            <h4>RESULT: {{ converted_amount|floatformat:2 }}</h4>
-        </div>
-        {% endif %}
-        <button type="submit" class="btn btn-primary mt-3">CONVERT</button>
-    </form>
+    </div>
+    
 </div>
 {% endblock %}
