@@ -51,6 +51,11 @@
           <li class="nav-item">
             <a class="navbar-brand fw-bold text-primary" href="{% url 'profile' %}">Profile</a>
           </li>
+          {% if user.is_staff %}
+          <li class="nav-item">
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'update_currencies' %}">Update Currencies</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="navbar-brand fw-bold text-primary" href="{% url 'logout' %}" onclick="return confirm('Are you sure?')">Logout</a>
           </li>

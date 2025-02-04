@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from .models import Currency
+from .services import update_currency_rates
+from django.contrib.auth.decorators import permission_required
+
 
 # Create your views here.
 
@@ -39,5 +42,12 @@ def converter(request):
     return render(request, 'converter.html', context)
 
 
+@permission_required('currencies.can_update_rates', raise_exception=True)
 def update(request):
-    return render(request, 'update.html')
+    if request.method == 'POST':
+        success, message = update_currency_rates()
+        if success:
+            return render(request, 'update_currencies.html', {'message': message})
+        else:
+            return render(request, 'update_currencies.html', {'error': message})
+    return render(request, 'update_currencies.html')

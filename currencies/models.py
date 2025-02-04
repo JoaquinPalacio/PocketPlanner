@@ -9,5 +9,10 @@ class Currency(models.Model):
     rate_to_usd = models.FloatField()
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        permissions = [
+            ('can_update_rates', 'Can update currency rates'),
+        ]
+
     def __str__(self):
         return self.name
