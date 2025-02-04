@@ -2,9 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.db import IntegrityError
-from .models import CustomUser
 from .forms import CustomSignupForm, UpdateProfileForm
 from currencies.models import Currency
 
@@ -46,7 +43,6 @@ def login_user(request):
 @login_required
 def logout_user(request):
     logout(request)
-    messages.success(request, 'Sesión cerrada.')
     return redirect('home')
 
 
@@ -61,7 +57,6 @@ def update_profile(request):
         form = UpdateProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated.')
             return redirect('profile')
     else:
         form = UpdateProfileForm(instance=request.user)
@@ -71,8 +66,5 @@ def update_profile(request):
 
 @login_required
 def delete_profile(request):
-    if request.method == 'POST':
-        request.user.delete()
-        messages.success(request, 'Perfil eliminado.')
-        return redirect('home')
-    return render(request, 'delete.html')
+    request.user.delete()
+    return redirect('home')
