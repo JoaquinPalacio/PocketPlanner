@@ -1,15 +1,38 @@
 from django import forms
 from .models import Transaction
+from categories.models import Category
+from currencies.models import Currency
 
 
-class TrasactionForm(forms.ModelForm):
+class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ['amount', 'type_transaction', 'category', 'currency']
-
+        widgets = {
+            'type_transaction': forms.Select(attrs={
+                'class': 'form-select',
+                'required': True
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select select2-search',
+                'required': False
+            }),
+            'currency': forms.Select(attrs={
+                'class': 'form-select select2-search',
+                'required': True
+            }),
+        }
+    
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if user:
-            self.fields['category'].queryset = user.category_set.all()
-            self.fields['currency'].queryset = user.currency_set.all()
+
+        if self.user:
+            self.fields['category'].queryset = Category.objects.filter(user=self.user)
+            self.fields['currency'].queryset = Currency.objects.all()
+            
+            self.fields['amount'].widget.attrs.update({
+            'class': 'form-control',
+            'step': '0.01',
+            'placeholder': '0.00'
+            })
