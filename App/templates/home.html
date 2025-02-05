@@ -17,8 +17,73 @@
                     <a href="{% url 'categories' %}" class="btn btn-outline-secondary btn-lg px-4">Manage your categories</a>
                 </div>
                 {% endif %}
+                {% if user.is_authenticated %}
+                <h4 class="display-6 mb-3 mt-5">Your withdrawals by category</h4>
+                <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 400px;" class="mt-3 mb-5">
+                    <canvas id="categoryChart" style="max-width: 800px; max-height: 400px;"></canvas>
+                </div>
+                
+                <h4 class="display-6 mb-3 mt-5">Your deposits by category</h4>
+                <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 400px;" class="mt-3 mb-5">
+                    <canvas id="categoryChartDeposits" style="max-width: 800px; max-height: 400px;"></canvas>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const charts = [
+        {
+            id: 'categoryChart',
+            data: {{ chart_data|safe }},
+            label: 'Withdrawals by category (in {{ user.base_currency.code }})'
+        },
+        {
+            id: 'categoryChartDeposits',
+            data: {{ chart_data_deposits|safe }},
+            label: 'Deposits by category (in {{ user.base_currency.code }})'
+        }
+    ];
+
+    charts.forEach(chart => {
+        const config = {
+            type: 'pie',
+            data: {
+                labels: chart.data.labels,
+                datasets: [{
+                    label: chart.label,
+                    data: chart.data.data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                }
+            }
+        };
+        new Chart(document.getElementById(chart.id), config);
+    });
+</script>
+{% endif %}
+
 {% endblock %}
