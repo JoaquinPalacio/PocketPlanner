@@ -7,6 +7,15 @@
     </div>
     
     <div class="card-body">
+
+        <form method="GET" action="{% url 'currencies' %}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Search...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">

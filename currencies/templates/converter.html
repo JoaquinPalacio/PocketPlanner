@@ -11,7 +11,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="from_currency">FROM</label>
-                        <select class="form-control form-control-lg" id="from_currency" name="from_currency">
+                        <select class="form-control form-control-lg select2-search" id="from_currency" name="from_currency">
                             {% for currency in currencies %}
                                 <option value="{{ currency.code }}" 
                                     {% if from_currency == currency.code %}selected{% endif %}>
@@ -22,7 +22,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="to_currency">TO</label>
-                        <select class="form-control form-control-lg" id="to_currency" name="to_currency">
+                        <select class="form-control form-control-lg select2-search" id="to_currency" name="to_currency">
                             {% for currency in currencies %}
                                 <option value="{{ currency.code }}" 
                                     {% if to_currency == currency.code %}selected{% endif %}>

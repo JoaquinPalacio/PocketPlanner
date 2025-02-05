@@ -2,16 +2,23 @@ from django.shortcuts import render
 from .models import Currency
 from .services import update_currency_rates
 from django.contrib.auth.decorators import permission_required
+from django.db.models import Q
 
 
 # Create your views here.
 
 
 def all_currencies(request):
+    query = request.GET.get('q', '')
     currencies = Currency.objects.all()
+    
+    if query:
+        currencies = currencies.filter(Q(code__icontains=query) | Q(name__icontains=query))
+    
     context = {
         'currencies': currencies,
-        'last_updated': Currency.objects.first().updated_at if Currency.objects.exists() else None
+        'last_updated': Currency.objects.first().updated_at if Currency.objects.exists() else None,
+        'query': query,
     }
     return render(request, 'currencies.html', context)
 

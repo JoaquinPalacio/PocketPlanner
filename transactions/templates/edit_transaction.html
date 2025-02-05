@@ -36,7 +36,7 @@
 
                 <div class="col-md-6">
                     <label for="currency" class="form-label">Currency</label>
-                    <select class="form-select" id="currency" name="currency" required>
+                    <select class="form-select select2-search" id="currency" name="currency" required>
                         {% for currency in currencies %}
                         <option value="{{ currency.id }}" {% if transaction.currency.id == currency.id %}selected{% endif %}>{{ currency.code }}</option>
                         {% endfor %}
