@@ -20,7 +20,7 @@ class UpdateProfileForm(forms.ModelForm):
     base_currency = forms.ModelChoiceField(
         queryset=Currency.objects.all(),
         required=True,
-        label="Moneda Base"
+        label="Base Currency"
     )
 
     class Meta:
