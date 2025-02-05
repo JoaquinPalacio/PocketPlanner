@@ -25,11 +25,6 @@ def all_categories(request):
     return render(request, 'categories.html', {'categories': categories})
 
 
-@login_required
-def detail(request, id):
-    category = get_object_or_404(Category, id=id)
-    return render(request, 'detail_category.html', {'category': category})
-
 
 @login_required
 def edit(request, id):
