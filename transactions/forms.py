@@ -2,6 +2,7 @@ from django import forms
 from .models import Transaction
 from categories.models import Category
 from currencies.models import Currency
+from django.core.exceptions import ValidationError
 
 
 class TransactionForm(forms.ModelForm):
@@ -36,3 +37,11 @@ class TransactionForm(forms.ModelForm):
             'step': '0.01',
             'placeholder': '0.00'
             })
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount is None:
+            raise ValidationError("Amount must be positive")
+        if amount < 0:
+            raise ValidationError("Amount must be positive")
+        return amount

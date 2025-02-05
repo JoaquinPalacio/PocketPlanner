@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -21,3 +22,9 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.type_transaction} - {self.amount} - {self.currency.code}"
+    
+    def clean(self):
+        if self.amount is None:
+            raise ValidationError("Amount must be positive")
+        if self.amount < 0:
+            raise ValidationError("Amount must be positive")
