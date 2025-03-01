@@ -162,13 +162,3 @@ Pocket Planner uses the [ExchangeRate-API](https://www.exchangerate-api.com/) to
 | name       | CharField    | Full name of the currency.     |
 | rate_to_usd| FloatField   | Exchange rate to USD.          |
 | updated_at | DateTimeField| Last update timestamp.         |
-
----
-
-## Contributing
-Contributions are welcome! To contribute:
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature-name`.
-3. Commit your changes: `git commit -m "Add your feature description"`.
-4. Push to the branch: `git push origin feature/your-feature-name`.
-5. Open a pull request.
